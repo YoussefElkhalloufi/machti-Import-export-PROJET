@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="456.0" prefWidth="770.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.machti_import_export.Controller.ControllerIndex">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="600.0" layoutX="122.0" layoutY="-23.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../images/indexLogo.png" />
+         </image>
+      </ImageView>
+      <Line endX="666.0" endY="7.62939453125E-6" layoutX="104.0" layoutY="102.0" startX="-103.99999237060547" startY="7.62939453125E-6" strokeWidth="3.0" />
+      <AnchorPane fx:id="fournisseur" layoutX="182.0" layoutY="145.0" onMouseClicked="#switchToFournisseur" onMouseEntered="#onMouseEnteredFournisseur" onMouseExited="#onMouseExitedFournisseur" prefHeight="102.0" prefWidth="270.0" style="-fx-background-color: ededed; -fx-background-radius: 25;">
+         <children>
+            <ImageView fitHeight="36.0" fitWidth="36.0" layoutX="14.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/fournisseurs.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="18.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fournisseurs">
+               <font>
+                  <Font name="Javanese Text" size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="nbrFournisseur" layoutX="18.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="21">
+               <font>
+                  <Font name="Javanese Text" size="16.0" />
+               </font>
+            </Text>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane fx:id="client" layoutX="182.0" layoutY="259.0" onMouseClicked="#switchToClient" onMouseEntered="#onMouseEnteredClient" onMouseExited="#onMouseExitedClient" prefHeight="102.0" prefWidth="270.0" style="-fx-background-color: ededed; -fx-background-radius: 25;">
+         <children>
+            <ImageView fitHeight="36.0" fitWidth="36.0" layoutX="14.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/client.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="18.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Client">
+               <font>
+                  <Font name="Javanese Text" size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="nbrClient" layoutX="18.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="28">
+               <font>
+                  <Font name="Javanese Text" size="16.0" />
+               </font>
+            </Text>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane fx:id="produits" layoutX="486.0" layoutY="145.0" onMouseClicked="#switchToProduit" onMouseEntered="#onMouseEnteredProduit" onMouseExited="#onMouseExitedProduit" prefHeight="102.0" prefWidth="270.0" style="-fx-background-color: ededed; -fx-background-radius: 25;">
+         <children>
+            <ImageView fitHeight="36.0" fitWidth="36.0" layoutX="14.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/inventaire.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="18.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produits">
+               <font>
+                  <Font name="Javanese Text" size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="nbrProduit" layoutX="18.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="21">
+               <font>
+                  <Font name="Javanese Text" size="16.0" />
+               </font>
+            </Text>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane fx:id="commande" layoutX="486.0" layoutY="259.0" onMouseClicked="#switchToCommande" onMouseEntered="#onMouseEnteredCommande" onMouseExited="#onMouseExitedCommande" prefHeight="102.0" prefWidth="270.0" style="-fx-background-color: ededed; -fx-background-radius: 25;">
+         <children>
+            <ImageView fitHeight="36.0" fitWidth="36.0" layoutX="14.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/commande.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="18.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Commande">
+               <font>
+                  <Font name="Javanese Text" size="18.0" />
+               </font>
+            </Text>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <Line endX="666.0" endY="7.62939453125E-6" layoutX="99.0" layoutY="408.0" startX="-103.99999237060547" startY="7.62939453125E-6" strokeWidth="2.0" />
+      <AnchorPane fx:id="rapport" layoutX="14.0" layoutY="196.0" onMouseClicked="#switchToRapport" onMouseEntered="#onMouseEnteredRapport" onMouseExited="#onMouseExitedRapport" prefHeight="102.0" prefWidth="152.0" style="-fx-background-color: ededed; -fx-background-radius: 25;">
+         <children>
+            <ImageView fitHeight="36.0" fitWidth="36.0" layoutX="51.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/rapportDeVente.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="38.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rapport" textAlignment="CENTER">
+               <font>
+                  <Font name="Javanese Text" size="18.0" />
+               </font>
+            </Text>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <Text layoutX="150.0" layoutY="435.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Système de Gestion des Produits Agricoles et des Machines">
+         <font>
+            <Font name="Javanese Text" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

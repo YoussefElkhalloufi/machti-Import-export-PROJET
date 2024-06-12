@@ -1,0 +1,70 @@
+Voici un exemple d'application informatique pour une entreprise d'import/export de produits agricoles et de machines, réalisé en Java avec JavaFX pour l'interface utilisateur et SQL Server pour la base de données. Ce projet peut être réalisé en deux semaines avec un rapport incluant la documentation technique, la conception, et les étapes de développement. 
+
+**Nom de l'Application**: AgroEx
+
+**Fonctionnalités principales**:
+
+1. Gestion des produits:
+   - Ajout, suppression et mise à jour des produits agricoles et des machines.
+   - Recherche de produits par nom, catégorie, ou fournisseur.
+
+2. Gestion des fournisseurs:
+   - Ajout, suppression et mise à jour des informations sur les fournisseurs.
+   - Affichage des produits fournis par chaque fournisseur.
+
+3. Gestion des commandes:
+   - Création de nouvelles commandes pour l'importation/exportation de produits.
+   - Suivi des étapes de traitement des commandes (en cours, livrée, annulée, etc.).
+   - Génération de factures pour les commandes traitées.
+
+4. Gestion des stocks:
+   - Suivi des niveaux de stock pour chaque produit.
+   - Notification en cas de stock bas ou épuisé.
+
+5. Interface utilisateur conviviale:
+   - Utilisation de JavaFX pour une interface graphique moderne et intuitive.
+   - Navigation facile entre les différentes fonctionnalités de l'application.
+
+**Technologies utilisées**:
+
+- Langage de programmation: Java
+- Interface utilisateur: JavaFX
+- Base de données: SQL Server
+
+**Architecture**:
+
+L'application suit une architecture MVC (Modèle-Vue-Contrôleur) pour une meilleure séparation des préoccupations et une maintenabilité accrue.
+
+- **Modèle**: Comprend les classes représentant les entités métier telles que Produit, Fournisseur, Commande, etc. Ces classes interagissent avec la base de données pour la persistance des données.
+
+- **Vue**: Implémente l'interface utilisateur à l'aide de JavaFX. Chaque fonctionnalité de l'application est présentée de manière conviviale et intuitive à l'utilisateur final.
+
+- **Contrôleur**: Gère les interactions entre la vue et le modèle. Il contient la logique métier de l'application, traite les actions de l'utilisateur et met à jour le modèle en conséquence.
+
+**Rapport**:
+
+Le rapport comprendra les sections suivantes:
+
+1. Introduction:
+   - Objectif du projet
+   - Description de l'entreprise et de ses besoins en matière de gestion des importations/exportations.
+
+2. Conception:
+   - Architecture de l'application
+   - Modèle de données relationnel pour la base de données SQL Server
+   - Conception de l'interface utilisateur avec des maquettes JavaFX
+
+3. Implémentation:
+   - Description des principales fonctionnalités implémentées
+   - Difficultés rencontrées et solutions adoptées
+   - Tests effectués et résultats obtenus
+
+4. Conclusion:
+   - Récapitulation des réalisations
+   - Perspectives d'amélioration et recommandations pour l'avenir
+
+5. Annexes:
+   - Code source
+   - Captures d'écran de l'application en cours d'exécution
+
+Ce projet, bien que réalisable en deux semaines, nécessite une planification minutieuse et une répartition efficace des tâches pour respecter les délais impartis tout en assurant la qualité du code et de la documentation.
