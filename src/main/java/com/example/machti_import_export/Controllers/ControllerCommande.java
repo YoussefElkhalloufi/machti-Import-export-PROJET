@@ -1,4 +1,4 @@
-package com.example.machti_import_export.Controller;
+package com.example.machti_import_export.Controllers;
 
 import com.example.machti_import_export.MachtiSte.Machti;
 import com.example.machti_import_export.SwitchWindows;

@@ -1,8 +1,7 @@
-package com.example.machti_import_export.Controller;
+package com.example.machti_import_export.Controllers;
 
 import com.example.machti_import_export.Alerts;
 import com.example.machti_import_export.MachtiSte.Client;
-import com.example.machti_import_export.MachtiSte.Fournisseur;
 import com.example.machti_import_export.MachtiSte.Machti;
 import com.example.machti_import_export.SwitchWindows;
 import javafx.collections.FXCollections;
