@@ -328,6 +328,33 @@ public class Machti {
             return false;
         }
     }
+
+
+    //RAPPORT
+
+    public ResultSet getRapport_ni_periode_ni_type(){
+        try{
+            String query = "select p.refProduit, p.LibelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c\n" +
+                    "where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande \n" +
+                    "group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.LibelleProduit" ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet getRapport_par1_PERIODE(String date1, String date2){
+        try{
+            String query = "select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c\n" +
+                    "where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande between '"+date1+"' and '"+date2+"'\n" +
+                    "group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit" ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e ){
+            e.printStackTrace();
+            return null;
+        }
+    }
     public int getnbFournisseur() {return fournisseurs.size();}
     public int getnbClient() {return clients.size();}
     public int getnbProduit() {return produits.size();}

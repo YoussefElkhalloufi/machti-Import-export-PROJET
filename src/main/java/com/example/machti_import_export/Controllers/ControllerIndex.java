@@ -48,14 +48,14 @@ public class ControllerIndex {
         nbrProduit.setText(String.valueOf(m.getnbProduit()));
     }
 
-    public void enlargeButton(AnchorPane anchor) {
+    public static void enlargeButton(AnchorPane anchor) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(120), anchor);
         scaleTransition.setToX(ENLARGE_FACTOR);
         scaleTransition.setToY(ENLARGE_FACTOR);
         scaleTransition.play();
     }
 
-    public void restoreButtonSize(AnchorPane anchor) {
+    public static void restoreButtonSize(AnchorPane anchor) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(120), anchor);
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
@@ -63,12 +63,12 @@ public class ControllerIndex {
     }
 
 
-    private void onMouseEntered(AnchorPane anchor){
+    public static  void onMouseEntered(AnchorPane anchor){
         anchor.setStyle("-fx-background-color : #D4D4D4; -fx-background-radius: 25;");
         enlargeButton(anchor);
     }
 
-    private void onMouseExited(AnchorPane anchor){
+    public static void onMouseExited(AnchorPane anchor){
         anchor.setStyle("-fx-background-color : #EDEDED; -fx-background-radius: 25;");
         restoreButtonSize(anchor);
     }
@@ -144,7 +144,7 @@ public class ControllerIndex {
     }
 
     @FXML
-    void switchToRapport(MouseEvent event) {
-
+    void switchToRapport(MouseEvent event) throws IOException {
+        sw.switchWindowPane(event, "Rapport.fxml");
     }
 }

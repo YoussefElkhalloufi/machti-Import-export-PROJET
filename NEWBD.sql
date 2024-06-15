@@ -212,4 +212,27 @@ cmd.etat_Commande as [Etat Commande], cmd.dateCommande as [Date Commande], cmd.T
 from client c, commande cmd 
 where c.idClient = cmd.idClient and c.idClient = 1 and cmd.idCommande = 1
 
+select * from produit
+select * from commande
+select * from ligneCommande
 
+----------------------------------rapport par produit sans periode-------------------------------------
+select p.refProduit, p.LibelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande
+group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.LibelleProduit
+
+-----------------------------------rapport par produit (periode)-------------------------------------
+select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande between '06-10-2024' and '06-14-2024'
+group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit
+
+----------------------------------rapport par produit(type, periode)-------------------------------------
+select p.refProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande 
+between '06-10-2024' and '06-15-2024' and p.typeProduit ='Machine'
+group by p.refProduit, p.typeProduit, p.prix_Unitaire
+
+--------------------------------------rapport par produit(type)-------------------------------------
+select p.refProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and p.typeProduit = 'Machine'
+group by p.refProduit, p.typeProduit, p.prix_Unitaire

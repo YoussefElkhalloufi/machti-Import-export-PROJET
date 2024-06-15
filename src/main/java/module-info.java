@@ -6,6 +6,9 @@ module com.example.machti_import_export {
     requires com.dlsc.formsfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires kernel;
+    requires layout;
+    requires java.desktop;
 
     opens com.example.machti_import_export to javafx.fxml;
     exports com.example.machti_import_export;

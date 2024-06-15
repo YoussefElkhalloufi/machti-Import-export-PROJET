@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.machti_import_export.Controllers.ControllerRapportVenteProduit">
+   <children>
+      <Line endX="666.0" endY="7.62939453125E-6" layoutX="104.0" layoutY="63.0" startX="-103.99999237060547" startY="7.62939453125E-6" strokeWidth="2.0" />
+      <Text layoutX="223.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rapport de ventes par produit">
+         <font>
+            <Font name="Javanese Text" size="25.0" />
+         </font>
+      </Text>
+      <Line endX="666.0" endY="265.9999694824219" layoutX="-281.0" layoutY="210.0" startX="666.0" startY="-145.33334350585938" strokeWidth="2.0" />
+      <Line endX="666.0" endY="7.62939453125E-6" layoutX="104.0" layoutY="260.0" startX="-103.99999237060547" startY="7.62939453125E-6" strokeWidth="2.0" />
+      <Text layoutX="57.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rapport de ventes par produit sans période ni type" textAlignment="CENTER" wrappingWidth="274.5458984375">
+         <font>
+            <Font name="Javanese Text" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="426.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rapport de vente par période et type" textAlignment="CENTER" wrappingWidth="323.681640625">
+         <font>
+            <Font name="Javanese Text" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="57.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rapport de vente par type *sans période*" textAlignment="CENTER" wrappingWidth="274.5458984375">
+         <font>
+            <Font name="Javanese Text" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="435.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rapport de vente par période *sans type*" textAlignment="CENTER" wrappingWidth="274.5458984375">
+         <font>
+            <Font name="Javanese Text" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="463.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type :" textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="12.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="CmbType_par2" layoutX="520.0" layoutY="118.0" prefWidth="150.0">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Machine" />
+               <String fx:value="Produit agricole" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <Text layoutX="57.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type :" textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="12.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="CmbType_par1" layoutX="114.0" layoutY="359.0" prefWidth="150.0">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+            <String fx:value="Machine" />
+            <String fx:value="Produit agricole" />
+         </FXCollections>
+      </items>
+      </ComboBox>
+      <DatePicker fx:id="dp_du_par2" layoutX="446.0" layoutY="173.0" prefHeight="25.0" prefWidth="125.0" />
+      <Text layoutX="404.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Du :" textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="12.0" />
+         </font>
+      </Text>
+      <DatePicker fx:id="dp_a_par2" layoutX="628.0" layoutY="173.0" prefHeight="25.0" prefWidth="125.0" />
+      <Text layoutX="604.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="à :" textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="12.0" />
+         </font>
+      </Text>
+      <DatePicker fx:id="dp_du_par1" layoutX="438.0" layoutY="346.0" prefHeight="25.0" prefWidth="125.0" />
+      <Text layoutX="396.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Du :" textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="12.0" />
+         </font>
+      </Text>
+      <DatePicker fx:id="dp_a_par1" layoutX="620.0" layoutY="346.0" prefHeight="25.0" prefWidth="125.0" />
+      <Text layoutX="596.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="à :" textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="12.0" />
+         </font>
+      </Text>
+      <Button fx:id="genererButton_par0" layoutX="101.0" layoutY="214.0" mnemonicParsing="false" onAction="#genererRapport_par0" onMouseEntered="#onMouseEnteredGenerer_par0" onMouseExited="#onMouseExitedGenerer_par0" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Générer">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="genererButton_par2" layoutX="495.0" layoutY="214.0" mnemonicParsing="false" onAction="#genererRapport_par2" onMouseEntered="#onMouseEnteredGenerer_par2" onMouseExited="#onMouseExitedGenerer_par2" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Générer">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="genererButton_par1_TYPE" layoutX="101.0" layoutY="430.0" mnemonicParsing="false" onAction="#genererRapport_par1_TYPE" onMouseEntered="#onMouseEnteredGenerer_par1_TYPE" onMouseExited="#onMouseExitedGenerer_par1_TYPE" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Générer">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="genererButton_par1_PERIODE" layoutX="495.0" layoutY="430.0" mnemonicParsing="false" onAction="#genererRapport_par1_PERIODE" onMouseEntered="#onMouseEnteredGenerer_par1_PERIODE" onMouseExited="#onMouseExitedGenerer_par1_PERIODE" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Générer">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="precedentButton" layoutX="25.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToRapport" onMouseEntered="#onMouseEnteredPrecedent" onMouseExited="#onMouseExitedPrecedent" prefHeight="37.0" prefWidth="48.0" style="-fx-background-color: while;">
+         <graphic>
+            <ImageView fitHeight="22.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/retour.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>
