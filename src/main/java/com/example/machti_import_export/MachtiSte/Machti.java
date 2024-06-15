@@ -245,7 +245,7 @@ public class Machti {
 
     public ResultSet getProduitParCommande(int idCommande){
         try{
-            String query = "select p.libelleProduit as [Produit], p.typeProduit as [Type Produit], p.prix_Unitaire as [Prix unitaire],  lc.qte as [Quatité commandé] from produit p, ligneCommande lc \n" +
+            String query = "select p.refProduit, p.libelleProduit as [Produit], p.typeProduit as [Type Produit],  lc.qte as [Quatité commandé], p.prix_Unitaire as [Prix unitaire] from produit p, ligneCommande lc \n" +
                     "where p.refProduit = lc.refProduit and lc.idCommande = " +idCommande ;
             return stmt.executeQuery(query);
         }catch(SQLException e){
@@ -351,6 +351,31 @@ public class Machti {
                     "group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit" ;
             return stmt.executeQuery(query);
         }catch(SQLException e ){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet getRapport_par1_TYPE(String type){
+        try{
+            String query = "select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c\n" +
+                    "where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and p.typeProduit = '"+type+"'\n" +
+                    "group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit" ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet getRapport_par2(String date1, String date2, String type){
+        try{
+            String query = "select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c\n" +
+                    "where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande \n" +
+                    "between '"+date1+"' and '"+date2+"' and p.typeProduit ='"+type+"'\n" +
+                    "group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit";
+            return stmt.executeQuery(query);
+        }catch (SQLException e){
             e.printStackTrace();
             return null;
         }

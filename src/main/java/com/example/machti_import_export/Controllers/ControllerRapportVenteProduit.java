@@ -63,7 +63,7 @@ public class ControllerRapportVenteProduit {
 
     @FXML
     void genererRapport_par0(ActionEvent event) throws SQLException, FileNotFoundException {
-        String fichier = "Rapport(Sans_période_ni_type)_" + LocalDate.now() +".pdf" ;
+        String fichier = "RapportParPRoduit_" + LocalDate.now() +".pdf" ;
         PDFgeneration.rapportParProduit(fichier,null, null, m.getRapport_ni_periode_ni_type());
     }
 
@@ -77,7 +77,13 @@ public class ControllerRapportVenteProduit {
             alert.showWarning("Attention","Veuillez specifier les dates");
             return ;
         }
-        String fichier = "Rapport(par_période_sans_type)_" + LocalDate.now() +".pdf" ;
+
+        if(du_date.isAfter(a_date)){
+            alert.showWarning("Attention","La date de début ne peut pas être après la date de fin.");
+            return ;
+        }
+
+        String fichier = "Rapport_Période_" + LocalDate.now() +".pdf" ;
         String du_date_String = du_date.format(formatter);
         String a_date_String = a_date.format(formatter);
 
@@ -89,18 +95,39 @@ public class ControllerRapportVenteProduit {
     }
 
     @FXML
-    void genererRapport_par1_TYPE(ActionEvent event) {
+    void genererRapport_par1_TYPE(ActionEvent event) throws SQLException, FileNotFoundException {
+        String fichier = "Rapport_Type_" +LocalDate.now() +".pdf";
 
+        PDFgeneration.rapportParProduit(fichier, null, null, m.getRapport_par1_TYPE(CmbType_par1.getValue()));
     }
 
     @FXML
-    void genererRapport_par2(ActionEvent event) {
+    void genererRapport_par2(ActionEvent event) throws SQLException, FileNotFoundException {
+        LocalDate du_date = dp_du_par2.getValue();
+        LocalDate a_date = dp_a_par2.getValue();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
+        if(du_date == null || a_date == null){
+            alert.showWarning("Attention","Veuillez specifier les dates");
+            return ;
+        }
+
+        if(du_date.isAfter(a_date)){
+            alert.showWarning("Attention","La date de début ne peut pas être après la date de fin.");
+            return ;
+        }
+
+        String fichier = "Rapport_Période_Type_" + LocalDate.now() +".pdf" ;
+        String du_date_String = du_date.format(formatter);
+        String a_date_String = a_date.format(formatter);
+
+        if(!m.getRapport_par2(du_date_String, a_date_String, CmbType_par2.getValue()).next()){
+            alert.showWarning("Attention","Aucun produit du type '"+CmbType_par2.getValue()+"' n'a été vendu pendant cette période. ");
+            return ;
+        }
+
+        PDFgeneration.rapportParProduit(fichier, du_date_String, a_date_String, m.getRapport_par2(du_date_String, a_date_String, CmbType_par2.getValue()));
     }
-
-
-
-
 
 
     @FXML

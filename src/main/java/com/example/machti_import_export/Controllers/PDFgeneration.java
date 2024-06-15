@@ -1,5 +1,6 @@
 package com.example.machti_import_export.Controllers;
 
+import com.example.machti_import_export.MachtiSte.Client;
 import com.example.machti_import_export.MachtiSte.Machti;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.geom.PageSize;
@@ -26,7 +27,9 @@ public class PDFgeneration {
 
     public static void main(String[] args) throws FileNotFoundException, SQLException {
         String fichier = "Rapport Sans période ni type_" + LocalDate.now() +".pdf";
-        rapportParProduit(fichier,null,null, null);
+        Machti m = new Machti();
+        Client c = new Client("Youssef El khalloufi","Hay mohammadi rue 72 N° 21","0627860225","EL AIOUN","MAROC");
+        genererCommande("Commande.pdf",202,c,"26-02-2024", m.getProduitParCommande(4) );
     }
     public static void rapportParProduit(String nomFichier,String date1, String date2, ResultSet rs) throws FileNotFoundException, SQLException {
 
@@ -73,8 +76,6 @@ public class PDFgeneration {
         document.add(divider);
 
         document.add(spaces);
-
-        Machti m = new Machti();
 
         rapportParProduit_Sans_Periode_Ni_Type(document, rs);
 
@@ -148,6 +149,120 @@ public class PDFgeneration {
         document.add(new Paragraph("\n"));
 
         document.add(tableTotal);
+    }
+
+    public static void genererCommande(String nomFichier, int idCmd, Client client, String dateCmd, ResultSet rs) throws SQLException, FileNotFoundException {
+        File commande = new File("Commande");
+        if (!commande.exists()) {
+            commande.mkdir();
+        }
+
+        String chemin = commande.getPath() +"/"+nomFichier;
+
+        PdfWriter ecrivainPdf = new PdfWriter(chemin);
+        PdfDocument documentPdf = new PdfDocument(ecrivainPdf);
+        documentPdf.setDefaultPageSize(PageSize.A4);
+
+        Document document = new Document(documentPdf);
+
+        Paragraph spaces = new Paragraph();
+        spaces.add("\n");
+
+        Paragraph infosEntreprise = new Paragraph()
+                .add(new Cell().add("Société MACHTI\n").setBold().setFontSize(20))
+                .add("\n81 BD LA RESISTANCE 4EME ETAGE, APRT N4\n")
+                .add("CASABLANCA \n")
+                .add("MAROC")
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontSize(12);
+
+        document.add(infosEntreprise);
+
+        document.add(spaces);
+
+        Border grayBorder = new SolidBorder(Color.GRAY, 2f);
+        Table divider = new Table(new float[]{190f * 3});
+        divider.setBorder(grayBorder);
+        document.add(divider);
+
+        document.add(spaces);
+
+
+
+        Table infosCommande = new Table(new float[]{120f, 150f});
+        infosCommande.addCell(new Cell().add("Commande N° :").setBold());
+        infosCommande.addCell(new Cell().add(String.valueOf(idCmd)));
+        infosCommande.addCell(new Cell().add("Date :").setBold());
+        infosCommande.addCell(new Cell().add(dateCmd));
+
+        Table infosAcheteur = new Table(new float[]{105f, 345f});
+        infosAcheteur.addCell(new Cell().add("Nom complet :").setBold().setBorder(Border.NO_BORDER));
+        infosAcheteur.addCell(new Cell().add(client.getNom()).setBorder(Border.NO_BORDER));
+        infosAcheteur.addCell(new Cell().add("Adresse :").setBold().setBorder(Border.NO_BORDER));
+        infosAcheteur.addCell(new Cell().add(client.getAdresse()+", " + client.getVille() +", " +client.getPays()).setBorder(Border.NO_BORDER));
+        infosAcheteur.addCell(new Cell().add("Telephone :").setBold().setBorder(Border.NO_BORDER));
+        infosAcheteur.addCell(new Cell().add(client.getTelephone()).setBorder(Border.NO_BORDER));
+
+
+        document.add(infosAcheteur);
+        document.add(spaces);
+        document.add(infosCommande);
+        document.add(spaces);
+        document.add(spaces);
+
+
+        Table table = new Table(new float[]{60f,250f,140f, 70f, 170f, 120f});
+        table.addCell(new Cell().add("Réf").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Désignation").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Type produit").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("QTE").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Prix Unitaire").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Montant total").setTextAlignment(TextAlignment.CENTER).setBold());
+
+
+        float total = 0;
+
+        while(rs.next()){
+            table.addCell(new Cell().add(String.valueOf(rs.getInt(1))).setTextAlignment(TextAlignment.CENTER).setBold());
+            table.addCell(new Cell().add(rs.getString(2)).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(rs.getString(3)).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(String.valueOf(rs.getInt(4))).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(String.valueOf(rs.getFloat(5))).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(String.valueOf(rs.getFloat(4)*rs.getFloat(5))).setTextAlignment(TextAlignment.CENTER));
+
+            total += rs.getFloat(4)*rs.getFloat(5);
+        }
+
+        table.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
+        table.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
+        table.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
+        table.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
+        table.addCell(new Cell().add("Total").setBold().setFontSize(15));
+        table.addCell(new Cell().add(total+" DH").setFontSize(15));
+
+
+        document.add(table);
+
+        document.add(spaces);
+        document.add(spaces);
+        Paragraph footer = new Paragraph("Signature de l'Agent responsable           ").setTextAlignment(TextAlignment.RIGHT).setFontSize(12);
+        document.add(footer);
+
+        document.add(spaces);
+        document.add(spaces);
+        document.add(spaces);
+        document.add(spaces);
+        document.add(spaces);
+        document.add(spaces);
+        document.add(spaces);
+        document.add(divider);
+
+
+        //TODO : finish footer
+
+        document.close();
+
+        openPDF(chemin);
     }
 
 

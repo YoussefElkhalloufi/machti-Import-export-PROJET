@@ -154,9 +154,6 @@ public class ControllerAjoutCommande {
     }
 
     //TODO : modifier etat dune commande
-    //TODO : check afficherProduit why doesnt it work
-    //TODO : Impression dune commande ( use facturation PFE)
-    //TODO : see what u gonna do in rapport
     @FXML
     void onMouseEnteredAjouter(MouseEvent event) {
         ajouterButton.setStyle("-fx-background-color : white; -fx-background-radius: 12;");
