@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ControllerClient {
 
@@ -69,9 +70,8 @@ public class ControllerClient {
     SwitchWindows sw = new SwitchWindows();
     Alerts alert = new Alerts();
 
-    //TODO : gestion des clients
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         // Set up the columns with PropertyValueFactory
         idClient.setCellValueFactory(new PropertyValueFactory<>("id"));
         nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -117,16 +117,20 @@ public class ControllerClient {
     }
 
     @FXML
-    void ajouterClient(ActionEvent event) {
+    void ajouterClient(ActionEvent event) throws SQLException {
         String nom = nomClient.getText().trim();
         String adresse = adresseClient.getText().trim();
         String tel = telClient.getText().trim();
         String ville = villeClient.getText().trim();
         String pays = paysClient.getText().trim();
 
-        if(nom.isEmpty() ){
+        if(nom.isEmpty()){
             alert.showWarning("Attention","Assurez-vous de remplir le nom du Client .");
         }else{
+            if(!tel.matches("\\d{10}")){
+                alert.showWarning("Attention","La forme du numero de telephone n'est pas valide.\nEX : 0612129090.");
+                return ;
+            }
             Client c = new Client(nom, adresse, tel, ville, pays);
             if(m.ajouterClient(c)){
                 alert.showAlert("Ajout avec succes","Le client a été ajouté avec succès","/images/checked.png");
@@ -138,7 +142,7 @@ public class ControllerClient {
     }
 
     @FXML
-    void modifierClient(ActionEvent event) {
+    void modifierClient(ActionEvent event) throws SQLException {
         String nom = nomClient.getText().trim();
         String adresse = adresseClient.getText().trim();
         String tel = telClient.getText().trim();
@@ -160,7 +164,7 @@ public class ControllerClient {
     }
 
     @FXML
-    void supprimerClient(ActionEvent event) {
+    void supprimerClient(ActionEvent event) throws SQLException {
         Client selectedClient = clientTableView.getSelectionModel().getSelectedItem();
 
         if(selectedClient != null){

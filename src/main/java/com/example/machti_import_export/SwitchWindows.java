@@ -44,6 +44,28 @@ public class SwitchWindows {
     }
 
 
+    public void switchWindowWithoutClosingTheMainOne(ActionEvent event, String fxmlFile) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlFile)));
+
+
+        // Create a new stage for scene1
+        Stage newStage = new Stage();
+        Scene newScene = new Scene(root);
+
+        // Load the icon for scene1
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/appLogo.png")));
+        newStage.getIcons().add(icon);
+
+        // Set the title for scene1
+        newStage.setResizable(false);
+        newStage.setTitle("Ste Machti");
+
+        // Set the scene and show the stage
+        newStage.setScene(newScene);
+
+        newStage.show();
+
+    }
 
     public void switchWindowPane(MouseEvent event, String window) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(window)));

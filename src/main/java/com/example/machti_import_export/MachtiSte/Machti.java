@@ -4,7 +4,6 @@ import com.example.machti_import_export.Connexion;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class Machti {
         rs.close();
     }
 
-    //TODO : PRODUIT 11111111111111111111
     public void setClients() throws SQLException {
         clients = new ArrayList<>();
 
@@ -102,6 +100,7 @@ public class Machti {
             return false;
         }
     }
+
 
     public boolean supprimerFournisseur(Fournisseur f){
        try{
@@ -167,8 +166,14 @@ public class Machti {
         return null ;
     }
 
-
-
+    public int getIndexProduit(String libelleP){
+        for(Produit p : produits){
+            if(p.getLibelleProduit().equalsIgnoreCase(libelleP)){
+                return produits.indexOf(p);
+            }
+        }
+        return -1 ;
+    }
     public boolean mofifierFournisseur(int idF, String nomF, String adresseF, String telF){
         try{
             String query = "update fournisseur set nomFournisseur = '"+nomF+"', adresse = '"+adresseF+"', telephone = '"+telF+"' where idFournisseur = " +idF;
@@ -214,26 +219,131 @@ public class Machti {
                     "lignecommande lc, produit p, Client clt\n" +
                     "where c.idCommande = lc.idCommande and lc.refProduit = p.refProduit \n" +
                     "and c.idClient = clt.idclient \n" +
-                    "group by clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT" ;
+                    "group by clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT order by c.idCommande" ;
             return stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    public ResultSet getCommande(int idCommande){
+        try{
+            String query = "select c.idCommande as [N° commande], clt.nom as client, \n" +
+                    "count(libelleproduit) as [nombre de produit commandé] ,\n" +
+                    "c.etat_Commande as [Etat commande], c.dateCommande as [Date commande], c.totalHT as [Total HT] from commande c ,\n" +
+                    "lignecommande lc, produit p, Client clt\n" +
+                    "where c.idCommande = lc.idCommande and lc.refProduit = p.refProduit \n" +
+                    "and c.idClient = clt.idclient \n and c.idCommande = " +idCommande +
+                    "group by clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT order by c.idCommande" ;
+            return stmt.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet getProduitParCommande(int idCommande){
+        try{
+            String query = "select p.libelleProduit as [Produit], p.typeProduit as [Type Produit], p.prix_Unitaire as [Prix unitaire],  lc.qte as [Quatité commandé] from produit p, ligneCommande lc \n" +
+                    "where p.refProduit = lc.refProduit and lc.idCommande = " +idCommande ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet getProduitParCommande(int idCommande, int refPRoduit){
+        try{
+            String query = "select p.libelleProduit as [Produit], p.typeProduit as [Type Produit], p.prix_Unitaire as [Prix unitaire],  lc.qte as [Quatité commandé] from produit p, ligneCommande lc \n" +
+                    "where p.refProduit = lc.refProduit and lc.idCommande = " +idCommande +" and p.refProduit = " +refPRoduit ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet getCommandeParClient(){
+        try{
+            String query = "select c.idClient as [Id client], c.nom as [Nom], c.ville as [Ville], c.pays as [Pays],\n" +
+                    "cmd.etat_Commande as [Etat Commande], cmd.dateCommande as [Date Commande], cmd.TotalHT as [Total HT]\n" +
+                    "from client c, commande cmd \n" +
+                    "where c.idClient = cmd.idClient" ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public ResultSet getCommandeParClient(int idClient){
+        try{
+            String query = "select c.idClient as [Id client], c.nom as [Nom], c.ville as [Ville], c.pays as [Pays],\n" +
+                    "cmd.etat_Commande as [Etat Commande], cmd.dateCommande as [Date Commande], cmd.TotalHT as [Total HT]\n" +
+                    "from client c, commande cmd \n" +
+                    "where c.idClient = cmd.idClient and cmd.idClient = " +idClient ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet commandeExists(int idCmd){
+        try{
+            String query = "Select * from Commande where idCommande = " +idCmd ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null ;
+        }
+    }
+
+    public ResultSet clientCommandeExists(int idCmd, int idClient){
+        try{
+            String query = "select * from Commande where idCommande = " +idCmd +" and idClient = " +idClient ;
+            return stmt.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null ;
+        }
+    }
+
+    public boolean ajouterCommande(int idCommande, int idClient, int refProduit, int qte){
+        try{
+            CallableStatement cs = conn.prepareCall("{call dbo.insererCommande(?,?,?,?)}");
+
+            cs.setInt(1, idCommande);
+            cs.setInt(2, idClient);
+            cs.setInt(3, refProduit);
+            cs.setInt(4, qte);
+
+            cs.execute();
+            return true;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
     public int getnbFournisseur() {return fournisseurs.size();}
     public int getnbClient() {return clients.size();}
     public int getnbProduit() {return produits.size();}
 
-    public ArrayList<Client> getClients() {
+    public ArrayList<Client> getClients() throws SQLException {
+        setClients();
         return clients;
     }
 
-    public ArrayList<Fournisseur> getFournisseurs() {
+    public ArrayList<Fournisseur> getFournisseurs() throws SQLException {
+        setFournisseurs();
         return fournisseurs;
     }
 
-    public ArrayList<Produit> getProduits() {
+    public ArrayList<Produit> getProduits() throws SQLException {
+        setProduits();
         return produits;
     }
 

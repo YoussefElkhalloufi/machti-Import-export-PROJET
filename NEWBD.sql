@@ -144,6 +144,11 @@ select * from Commande
 select * from ligneCommande
 select * from Produit
 select * from client
+select * from fournisseur
+insert into fournisseur values ('sadki','','')
+
+delete from fournisseur where idFournisseur = 5
+select count(*) from fournisseur
 
 update client
 set adresse = 'Sanitiago bernabeau', ville = 'Madrid', pays = 'Espagne' 
@@ -167,3 +172,44 @@ begin
 end
 
 drop trigger tgr_CalculTotalHT
+
+
+
+
+select * from commande
+
+
+select clt.nom, c.idCommande, p.libelleproduit, c.etat_Commande, c.dateCommande  from commande c , lignecommande lc, produit p, Client clt
+where c.idCommande = lc.idCommande and lc.refProduit = p.refProduit and c.idClient = clt.idclient
+
+
+select c.idCommande, p.libelleproduit, c.etat_Commande, c.dateCommande  from commande c , lignecommande lc, produit p, Client clt
+where c.idCommande = lc.idCommande and lc.refProduit = p.refProduit and c.idClient = clt.idclient and clt.nom = 'abdou salmi'
+
+
+----------------------------Client et nombre de produit commandé--------------------------------------
+select clt.nom as client, c.idCommande as [N° commande], 
+count(libelleproduit) as [nombre de produit commandé] ,
+c.etat_Commande as [Etat commande], c.dateCommande as [Date commande], c.totalHT as [Total HT] from commande c ,
+lignecommande lc, produit p, Client clt
+where c.idCommande = lc.idCommande and lc.refProduit = p.refProduit 
+and c.idClient = clt.idclient 
+group by clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT
+
+
+
+---------------------------------Produit par Commande --------------------------------------------
+select p.refProduit ,p.libelleProduit, p.typeProduit, p.prix_Unitaire, lc.qte from produit p, ligneCommande lc 
+where p.refProduit = lc.refProduit and lc.idCommande = 3 and p.refProduit = 2
+
+select * from ligneCommande where idCommande = 3
+select idClient from commande where idCommande = 3
+select * from commande
+
+
+select c.idClient as [Id client], c.nom as [Nom], c.ville as [Ville], c.pays as [Pays],
+cmd.etat_Commande as [Etat Commande], cmd.dateCommande as [Date Commande], cmd.TotalHT as [Total HT]
+from client c, commande cmd 
+where c.idClient = cmd.idClient and c.idClient = 1 and cmd.idCommande = 1
+
+

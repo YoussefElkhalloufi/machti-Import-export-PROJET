@@ -41,4 +41,16 @@ public class Produit {
     public int getStock() {
         return stock;
     }
+
+
+//    @Override
+//    public String toString() {
+//        return "Produit{" +
+//                "refProduit=" + refProduit +
+//                ", libelleProduit='" + libelleProduit + '\'' +
+//                ", typeProduit='" + typeProduit + '\'' +
+//                ", prixUnitaire=" + prixUnitaire +
+//                ", stock=" + stock +
+//                '}';
+//    }
 }

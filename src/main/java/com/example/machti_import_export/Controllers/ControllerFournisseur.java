@@ -3,6 +3,7 @@ package com.example.machti_import_export.Controllers;
 import com.example.machti_import_export.Alerts;
 import com.example.machti_import_export.MachtiSte.Fournisseur;
 import com.example.machti_import_export.MachtiSte.Machti;
+import com.example.machti_import_export.MachtiSte.Produit;
 import com.example.machti_import_export.SwitchWindows;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ControllerFournisseur {
 
@@ -60,7 +62,7 @@ public class ControllerFournisseur {
     Alerts alert = new Alerts();
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         // Set up the columns with PropertyValueFactory
         idFournisseur.setCellValueFactory(new PropertyValueFactory<>("id"));
         nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -93,7 +95,7 @@ public class ControllerFournisseur {
 
         Fournisseur f = m.afficherFournisseur(nomF);
 
-        if (f != null) {
+        if (f != null && fournisseurTableView.getItems().contains(f)) {
             fournisseurTableView.getSelectionModel().select(f);
         }else{
             alert.showWarning("Attention","Aucun responsable avec ce nom");
@@ -102,7 +104,7 @@ public class ControllerFournisseur {
 
 
     @FXML
-    void ajouterFournisseur(ActionEvent event) {
+    void ajouterFournisseur(ActionEvent event) throws SQLException {
         String nomF = nomFournisseur.getText().trim();
         String adresseF = adresseFournisseur.getText().trim();
         String telF = telFournisseur.getText().trim();
@@ -122,7 +124,7 @@ public class ControllerFournisseur {
     }
 
     @FXML
-    void supprimerFournisseur(ActionEvent event) {
+    void supprimerFournisseur(ActionEvent event) throws SQLException {
         Fournisseur selectedFournisseur = fournisseurTableView.getSelectionModel().getSelectedItem();
 
         if(selectedFournisseur != null) {
@@ -141,7 +143,7 @@ public class ControllerFournisseur {
 
 
     @FXML
-    void modifierFournisseur(ActionEvent event) {
+    void modifierFournisseur(ActionEvent event) throws SQLException {
         String nomF = nomFournisseur.getText().trim();
         String adresseF = adresseFournisseur.getText().trim();
         String telF = telFournisseur.getText().trim();

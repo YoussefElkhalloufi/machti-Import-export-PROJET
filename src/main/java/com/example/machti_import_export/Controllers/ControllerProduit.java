@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ControllerProduit {
@@ -63,7 +64,7 @@ public class ControllerProduit {
     Alerts alert = new Alerts();
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         ArrayList<Produit> produits = m.getProduits();
 
         // Set up the columns with PropertyValueFactory
@@ -88,6 +89,12 @@ public class ControllerProduit {
                 afficherProduitSelectionner();
             }
         });
+
+        for(Produit p : m.getProduits()) {
+            if(p.getStock() <= 10){
+                alert.showWarning("Attention","Le stock est bas, il ne reste que "+p.getStock()+" articles du produit " +p.getLibelleProduit());
+            }
+        }
     }
 
     private ArrayList<Integer> getIdfournisseurs(ArrayList<Fournisseur> fournisseurs) {
@@ -115,24 +122,28 @@ public class ControllerProduit {
 
     @FXML
     void afficherProduit(ActionEvent event) {
-        String libellePr = libelleProduitAfficher.getText().trim();
+        String libellePr = libelleProduitAfficher.getText();
 
-        Produit p = m.afficherProduit(libellePr);
-
-        if(p != null){
-            produitTableview.getSelectionModel().select(p);
-        }else{
+        //produit p = m.afficherProduit(libellePr);
+        int indexPr = m.getIndexProduit(libellePr);
+        if(indexPr == -1){
             alert.showWarning("Attention","Aucun produit avec ce libelle");
+        }else{
+            //System.out.println(produitTableview.getItems().contains(p));
+            //int indexP = produitTableview.getItems().indexOf(p);
+            produitTableview.getSelectionModel().select(indexPr);
+            System.out.println("index of produit a afficher: "+indexPr);
         }
     }
 
     @FXML
-    void ajouterProduit(ActionEvent event) {
+    void ajouterProduit(ActionEvent event) throws SQLException {
         String libellePr = libelleProduit.getText().trim();
         String typePr = typeProduitCmb.getValue();
-        float prixUnitairePr = Float.parseFloat(prixUnitaireProduit.getText().trim());
-        int stockPr = Integer.parseInt(stockProduit.getText().trim());
+
         int idFournisseur = 0 ;
+
+
         if(fournisseur.getValue() !=null){
             idFournisseur = fournisseur.getValue() ;
         }
@@ -140,6 +151,20 @@ public class ControllerProduit {
         if(libellePr.isEmpty() || idFournisseur == 0){
             alert.showWarning("Attention","Assurez-vous de remplir le libelle, et le fournisseur du produit .");
         }else{
+
+            if(!prixUnitaireProduit.getText().matches("\\d+(\\.\\d+)?")){
+                alert.showWarning("Attention","Le prix unitaire est non valide.");
+                return ;
+            }
+
+            if(!stockProduit.getText().matches("[1-9][0-9]*")){
+                alert.showWarning("Attention","Le stock est non valide.");
+                return ;
+            }
+
+            float prixUnitairePr = Float.parseFloat(prixUnitaireProduit.getText().trim());
+            int stockPr = Integer.parseInt(stockProduit.getText().trim());
+
             Produit p = new Produit(libellePr,typePr,prixUnitairePr,stockPr) ;
             if(m.ajouterProduit(p, idFournisseur)){
                 alert.showAlert("Ajout avec succes","Le produit a été ajouté avec succès","/images/checked.png");
@@ -151,11 +176,10 @@ public class ControllerProduit {
     }
 
     @FXML
-    void modifierProduit(ActionEvent event) {
+    void modifierProduit(ActionEvent event) throws SQLException {
         String libellePr = libelleProduit.getText().trim();
         String typePr = typeProduitCmb.getValue();
-        float prixUnitairePr = Float.parseFloat(prixUnitaireProduit.getText().trim());
-        int stockPr = Integer.parseInt(stockProduit.getText().trim());
+
 
 
         Produit selectedProduit = produitTableview.getSelectionModel().getSelectedItem();
@@ -163,6 +187,20 @@ public class ControllerProduit {
         if(selectedProduit == null){
             alert.showWarning("Attention","Veuillez sélectionner un produit d'après le tableau et modifier ses informations avant de procéder à la modification.");
         }else{
+
+            if(!prixUnitaireProduit.getText().matches("\\d+(\\.\\d+)?")){
+                alert.showWarning("Attention","Le prix unitaire est non valide.");
+                return ;
+            }
+
+            if(!stockProduit.getText().matches("[1-9][0-9]*")){
+                alert.showWarning("Attention","Le stock est non valide.");
+                return ;
+            }
+
+            float prixUnitairePr = Float.parseFloat(prixUnitaireProduit.getText().trim());
+            int stockPr = Integer.parseInt(stockProduit.getText().trim());
+
             if(m.modifierProduit(selectedProduit.getRefProduit(),libellePr,typePr,prixUnitairePr,stockPr)){
                 alert.showAlert("Modification avec succès", "Modification des informations du prduit avec succès .", "/images/checked.png");
                 initialize();
@@ -171,9 +209,9 @@ public class ControllerProduit {
             }
         }
     }
-    @FXML
-    void supprimerProduit(ActionEvent event) {
 
+    @FXML
+    void supprimerProduit(ActionEvent event) throws SQLException {
         Produit selectedProduit = produitTableview.getSelectionModel().getSelectedItem();
 
         if(selectedProduit != null){

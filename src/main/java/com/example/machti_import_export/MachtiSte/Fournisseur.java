@@ -4,7 +4,6 @@ public class Fournisseur {
     private int id;
     private String nom, adresse, telephone ;
 
-    //TODO : gestion des fournisseur
 
     public Fournisseur(int id, String nom, String adresse, String telephone) {
         this.id = id;
