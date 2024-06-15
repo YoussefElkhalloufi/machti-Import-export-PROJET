@@ -226,13 +226,22 @@ select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, 
 where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande between '06-10-2024' and '06-14-2024'
 group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit
 
+
+select * from ligneCommande where idCommande = 1
 ----------------------------------rapport par produit(type, periode)-------------------------------------
-select p.refProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
 where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande 
 between '06-10-2024' and '06-15-2024' and p.typeProduit ='Machine'
-group by p.refProduit, p.typeProduit, p.prix_Unitaire
+group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit
 
 --------------------------------------rapport par produit(type)-------------------------------------
 select p.refProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
 where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and p.typeProduit = 'Machine'
 group by p.refProduit, p.typeProduit, p.prix_Unitaire
+
+
+select p.refPRoduit , p.libelleProduit from produit p where refProduit not in 
+(select refProduit from ligneCommande )
+
+select * from ligneCommande
+select * from produit
