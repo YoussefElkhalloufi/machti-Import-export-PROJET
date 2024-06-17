@@ -6,6 +6,7 @@ import com.example.machti_import_export.SwitchWindows;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -29,23 +30,31 @@ public class ControllerCommande {
     @FXML
     private Button afficherCommandeButton;
     @FXML
+    private Button modifierButton;
+    @FXML
     private TextField idCommandeRecherche;
     @FXML
     private Text erreurMsgN_cmd;
+    @FXML
+    private ComboBox<String> cmbEtatCmd;
 
 
     SwitchWindows sw = new SwitchWindows();
     Machti m = ControllerIndex.m ;
 
     public static int idCommande = 0;
+    public static Object[] commande = null ;
     Alerts alert = new Alerts();
+
+
     public void initialize(){
         m.remplirTableview(m.getCommande(), commandeTableview);
+        cmbEtatCmd.getSelectionModel().select(0);
     }
 
     @FXML
     void afficherProduitParFacture(ActionEvent event) throws IOException {
-        Object[] commande = commandeTableview.getSelectionModel().getSelectedItem();
+        commande = commandeTableview.getSelectionModel().getSelectedItem();
 
         if(commande != null){
             idCommande = Integer.parseInt(commande[0].toString());
@@ -71,6 +80,23 @@ public class ControllerCommande {
 
         }
     }
+    @FXML
+    void modifierCommande(ActionEvent event) {
+        commande = commandeTableview.getSelectionModel().getSelectedItem();
+
+        if(commande != null){
+            idCommande = Integer.parseInt(commande[0].toString());
+            if(m.modifierCommande(idCommande, cmbEtatCmd.getValue())){
+                alert.showAlert("Modification","Modification effectue avec succès","/images/checked.png");
+                initialize();
+            }else{
+                alert.showAlert("Erreur","une erreur s'est produite lors de la modification de la commande","/images/annuler.png");
+            }
+        }else{
+            alert.showWarning("Attention","Veuillez selectionner une commande avant de proceder.");
+        }
+    }
+
 
     @FXML
     void ajouterCommande(ActionEvent event) throws IOException {
@@ -97,6 +123,11 @@ public class ControllerCommande {
     void onMouseEnteredAfficherCmd(MouseEvent event) {
         ControllerFournisseur.onMouseEntered(afficherCommandeButton);
     }
+    @FXML
+    void onMouseEnteredModifier(MouseEvent event) {
+        ControllerFournisseur.onMouseEntered(modifierButton);
+    }
+
 
 
     @FXML
@@ -120,6 +151,10 @@ public class ControllerCommande {
         ControllerFournisseur.onMouseExited(afficherCommandeButton);
     }
 
+    @FXML
+    void onMouseExitedModifier(MouseEvent event) {
+        ControllerFournisseur.onMouseExited(modifierButton);
+    }
 
     @FXML
     void switchToDashboard(ActionEvent event) throws IOException {

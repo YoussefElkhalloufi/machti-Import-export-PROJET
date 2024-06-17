@@ -52,8 +52,8 @@ public class ControllerRapport {
     }
 
     @FXML
-    void switchToRapportParClient(MouseEvent event) {
-
+    void switchToRapportParClient(MouseEvent event) throws IOException {
+        sw.switchWindowPane(event, "rapportParClient.fxml");
     }
 
     @FXML

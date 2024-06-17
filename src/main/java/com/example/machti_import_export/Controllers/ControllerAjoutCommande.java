@@ -120,7 +120,7 @@ public class ControllerAjoutCommande {
                 idCommande.setText("");
                 return ;
             }
-            if(!qteProduit.getText().matches("[1-9][0-9]*")){ /*TODO : do this PFE*/
+            if(!qteProduit.getText().matches("[1-9][0-9]*")){
                 alert.showWarning("Attention","La quantité doit être un nombre.");
                 return ;
             }
@@ -153,7 +153,6 @@ public class ControllerAjoutCommande {
         }
     }
 
-    //TODO : modifier etat dune commande
     @FXML
     void onMouseEnteredAjouter(MouseEvent event) {
         ajouterButton.setStyle("-fx-background-color : white; -fx-background-radius: 12;");

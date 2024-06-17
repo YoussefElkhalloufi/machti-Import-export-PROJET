@@ -3,6 +3,7 @@ create database machti_ImportExport
 
 use machti_ImportExport
 
+select * from client
 
 create table Fournisseur(
 idFournisseur int primary key identity,
@@ -245,3 +246,14 @@ select p.refPRoduit , p.libelleProduit from produit p where refProduit not in
 
 select * from ligneCommande
 select * from produit
+
+select c.idClient as [Id client], c.nom as [Nom], c.ville as [Ville], c.pays as [Pays],
+count(cmd.idCommande) as [Nombre de commande], sum(cmd.TotalHT) as [Total HT]
+from client c, commande cmd 
+where c.idClient = cmd.idClient group by c.idClient, c.nom, c.pays, c.ville
+
+
+select cmd.idCommande as [N° commande], cmd.etat_Commande as [Etat Commande], cmd.dateCommande
+as [Date Commande], cmd.TotalHT as [Total HT]
+from commande cmd, client c
+where cmd.idClient = c.idClient and c.idClient = 1

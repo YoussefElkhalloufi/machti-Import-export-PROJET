@@ -213,13 +213,13 @@ public class Machti {
 
     public ResultSet getCommande(){
         try{
-            String query = "select c.idCommande as [N° commande], clt.nom as client, \n" +
+            String query = "select c.idCommande as [N° commande], clt.idClient as [ID client], clt.nom as client, \n" +
                     "count(libelleproduit) as [nombre de produit commandé] ,\n" +
                     "c.etat_Commande as [Etat commande], c.dateCommande as [Date commande], c.totalHT as [Total HT] from commande c ,\n" +
                     "lignecommande lc, produit p, Client clt\n" +
                     "where c.idCommande = lc.idCommande and lc.refProduit = p.refProduit \n" +
                     "and c.idClient = clt.idclient \n" +
-                    "group by clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT order by c.idCommande" ;
+                    "group by clt.idClient, clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT order by c.idCommande" ;
             return stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -268,9 +268,9 @@ public class Machti {
     public ResultSet getCommandeParClient(){
         try{
             String query = "select c.idClient as [Id client], c.nom as [Nom], c.ville as [Ville], c.pays as [Pays],\n" +
-                    "cmd.etat_Commande as [Etat Commande], cmd.dateCommande as [Date Commande], cmd.TotalHT as [Total HT]\n" +
+                    "count(cmd.idCommande) as [Nombre de commande], sum(cmd.TotalHT) as [Total HT]\n" +
                     "from client c, commande cmd \n" +
-                    "where c.idClient = cmd.idClient" ;
+                    "where c.idClient = cmd.idClient group by c.idClient, c.nom, c.pays, c.ville\n" ;
             return stmt.executeQuery(query);
         }catch(SQLException e){
             e.printStackTrace();
@@ -281,10 +281,10 @@ public class Machti {
 
     public ResultSet getCommandeParClient(int idClient){
         try{
-            String query = "select c.idClient as [Id client], c.nom as [Nom], c.ville as [Ville], c.pays as [Pays],\n" +
-                    "cmd.etat_Commande as [Etat Commande], cmd.dateCommande as [Date Commande], cmd.TotalHT as [Total HT]\n" +
-                    "from client c, commande cmd \n" +
-                    "where c.idClient = cmd.idClient and cmd.idClient = " +idClient ;
+            String query = "select cmd.idCommande as [N° commande], cmd.etat_Commande as [Etat Commande], cmd.dateCommande\n" +
+                    "as [Date Commande], cmd.TotalHT as [Total HT]\n" +
+                    "from commande cmd, client c\n" +
+                    "where cmd.idClient = c.idClient and c.idClient = " +idClient ;
             return stmt.executeQuery(query);
         }catch(SQLException e){
             e.printStackTrace();
@@ -323,6 +323,16 @@ public class Machti {
 
             cs.execute();
             return true;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean modifierCommande(int idCmd, String etat){
+        try{
+            String query = "update commande set etat_commande = '" +etat+"' where idCommande = " +idCmd;
+            return stmt.executeUpdate(query) > 0;
         }catch(SQLException e){
             e.printStackTrace();
             return false;

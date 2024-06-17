@@ -14,6 +14,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 
+import javax.xml.transform.Result;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +30,8 @@ public class PDFgeneration {
         String fichier = "Rapport Sans période ni type_" + LocalDate.now() +".pdf";
         Machti m = new Machti();
         Client c = new Client("Youssef El khalloufi","Hay mohammadi rue 72 N° 21","0627860225","EL AIOUN","MAROC");
-        genererCommande("Commande.pdf",202,c,"26-02-2024", m.getProduitParCommande(4) );
+        //genererCommande("Commande.pdf",202,c,"26-02-2024", m.getProduitParCommande(4) );
+        rapportParClient("rapportParClient", c, m.getCommandeParClient(2));
     }
     public static void rapportParProduit(String nomFichier,String date1, String date2, ResultSet rs) throws FileNotFoundException, SQLException {
 
@@ -77,7 +79,7 @@ public class PDFgeneration {
 
         document.add(spaces);
 
-        rapportParProduit_Sans_Periode_Ni_Type(document, rs);
+        rapportParProduit(document, rs);
 
 
         document.add(spaces);
@@ -93,7 +95,7 @@ public class PDFgeneration {
         openPDF(chemin);
     }
 
-    public static void rapportParProduit_Sans_Periode_Ni_Type(Document document, ResultSet rs) throws SQLException {
+    public static void rapportParProduit(Document document, ResultSet rs) throws SQLException {
 
         Table table = new Table(new float[]{60f,250f,140f, 170f, 70f, 120f});
         table.addCell(new Cell().add("Réf").setTextAlignment(TextAlignment.CENTER).setBold());
@@ -151,13 +153,105 @@ public class PDFgeneration {
         document.add(tableTotal);
     }
 
+    public static void rapportParClient(String nomFichier, Client client, ResultSet rs) throws FileNotFoundException, SQLException {
+        File rapport = new File("Rapport");
+        if (!rapport.exists()) {
+            rapport.mkdir();
+        }
+
+        File rapportParClient = new File(rapport, "Rapport Par Client");
+        if (!rapportParClient.exists()) {
+            rapportParClient.mkdir();
+        }
+
+
+        String chemin = rapportParClient.getPath() +"/"+nomFichier;
+
+        PdfWriter ecrivainPdf = new PdfWriter(chemin);
+        PdfDocument documentPdf = new PdfDocument(ecrivainPdf);
+        documentPdf.setDefaultPageSize(new PageSize(600f, 700f));
+
+        Document document = new Document(documentPdf);
+
+        Paragraph spaces = new Paragraph();
+        spaces.add("\n");
+
+        Paragraph infosEntreprise = new Paragraph()
+                .add(new Cell().add("Société MACHTI\n").setBold().setFontSize(18))
+                .add("\nRapport de vente par Client\n")
+                .add("Date de génération du rapport : " + LocalDate.now())
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontSize(12);
+
+        document.add(infosEntreprise);
+
+
+        document.add(spaces);
+
+        Border grayBorder = new SolidBorder(Color.GRAY, 2f);
+        Table divider = new Table(new float[]{190f * 3});
+        divider.setBorder(grayBorder);
+        document.add(divider);
+
+        document.add(spaces);
+
+        Table infosClient = new Table(new float[]{105f, 345f});
+        infosClient.addCell(new Cell().add("Nom complet :").setBold().setBorder(Border.NO_BORDER));
+        infosClient.addCell(new Cell().add(client.getNom()).setBorder(Border.NO_BORDER));
+        infosClient.addCell(new Cell().add("Adresse :").setBold().setBorder(Border.NO_BORDER));
+        infosClient.addCell(new Cell().add(client.getAdresse()+", " + client.getVille() +", " +client.getPays()).setBorder(Border.NO_BORDER));
+        infosClient.addCell(new Cell().add("Telephone :").setBold().setBorder(Border.NO_BORDER));
+        infosClient.addCell(new Cell().add(client.getTelephone()).setBorder(Border.NO_BORDER));
+
+
+        document.add(infosClient);
+        document.add(spaces);
+
+
+        Table table = new Table(new float[]{110f,300f,300f, 100f});
+        table.addCell(new Cell().add("N° Commande").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Etat Commande").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Date Commande").setTextAlignment(TextAlignment.CENTER).setBold());
+        table.addCell(new Cell().add("Total HT").setTextAlignment(TextAlignment.CENTER).setBold());
+
+
+        float total = 0 ;
+
+        while(rs.next()){
+            table.addCell(new Cell().add(String.valueOf(rs.getInt(1))).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(rs.getString(2)).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(rs.getDate(3).toString()).setTextAlignment(TextAlignment.CENTER));
+            table.addCell(new Cell().add(String.valueOf(rs.getFloat(4))).setTextAlignment(TextAlignment.CENTER));
+
+            total += rs.getFloat(4);
+        }
+
+        Table tableTotal = new Table(new float[]{190f, 90f});
+        tableTotal.addCell(new Cell().add("Montant totale des ventes").setBold());
+        tableTotal.addCell(new Cell().add(total +" DH").setTextAlignment(TextAlignment.CENTER));
+
+        document.add(table);
+        document.add(spaces);
+        document.add(tableTotal);
+
+        document.add(spaces);
+        document.add(spaces);
+        document.add(spaces);
+        document.add(new Paragraph("Signature de l'Agent Responsable"));
+
+
+        document.close();
+        openPDF(chemin);
+
+    }
+
     public static void genererCommande(String nomFichier, int idCmd, Client client, String dateCmd, ResultSet rs) throws SQLException, FileNotFoundException {
         File commande = new File("Commande");
         if (!commande.exists()) {
             commande.mkdir();
         }
 
-        String chemin = commande.getPath() +"/"+nomFichier;
+        String chemin = commande.getPath() +"/"+nomFichier+"_"+dateCmd;
 
         PdfWriter ecrivainPdf = new PdfWriter(chemin);
         PdfDocument documentPdf = new PdfDocument(ecrivainPdf);
@@ -169,7 +263,7 @@ public class PDFgeneration {
         spaces.add("\n");
 
         Paragraph infosEntreprise = new Paragraph()
-                .add(new Cell().add("Société MACHTI\n").setBold().setFontSize(20))
+                .add(new Cell().add("Société MACHTI\n").setBold().setFontSize(20).setFontColor(Color.RED))
                 .add("\n81 BD LA RESISTANCE 4EME ETAGE, APRT N4\n")
                 .add("CASABLANCA \n")
                 .add("MAROC")
@@ -238,15 +332,15 @@ public class PDFgeneration {
         table.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
         table.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
         table.addCell(new Cell().add("Total").setBold().setFontSize(15));
-        table.addCell(new Cell().add(total+" DH").setFontSize(15));
+        table.addCell(new Cell().add(total+" DH").setFontSize(12).setTextAlignment(TextAlignment.CENTER));
 
 
         document.add(table);
 
         document.add(spaces);
         document.add(spaces);
-        Paragraph footer = new Paragraph("Signature de l'Agent responsable           ").setTextAlignment(TextAlignment.RIGHT).setFontSize(12);
-        document.add(footer);
+        Paragraph signature = new Paragraph("Signature de l'Agent responsable           ").setTextAlignment(TextAlignment.RIGHT).setFontSize(12);
+        document.add(signature);
 
         document.add(spaces);
         document.add(spaces);
@@ -254,11 +348,17 @@ public class PDFgeneration {
         document.add(spaces);
         document.add(spaces);
         document.add(spaces);
-        document.add(spaces);
+
+
+
         document.add(divider);
 
 
-        //TODO : finish footer
+        Paragraph footer = new Paragraph().setFontSize(12f).setTextAlignment(TextAlignment.CENTER)
+                .add("SIEGE SOCIAL : 81 BD LA RESISTANCE 4EME ETAGE, APRT N4 CASABLANCA, MAROC - " +
+                        "Fax : 0520186570 - TEL : 0773254249 - GMAIL : Machti.ste@gmail.com");
+
+        document.add(footer);
 
         document.close();
 
