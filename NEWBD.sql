@@ -6,7 +6,8 @@ use machti_ImportExport
 select * from client
 
 create table Fournisseur(
-idFournisseur int primary key identity,
+idFournisseur int primary key
+identity,
 nomFournisseur nvarchar(100),
 adresse nvarchar(255),
 telephone varchar(15) 
@@ -16,17 +17,21 @@ telephone varchar(15)
 create table Produit (
 refProduit int primary key identity ,
 LibelleProduit nvarchar(100),
-typeProduit varchar(50) check (typeProduit in ('Produit agricole','Machine') ),
+typeProduit varchar(50) check 
+(typeProduit in ('Produit agricole','Machine') ),
 prix_Unitaire float ,
 qte_stock int,
-idFournisseur int foreign key references fournisseur (idFournisseur)
+idFournisseur int foreign key 
+references fournisseur (idFournisseur)
 )
 
 create table client(
 idClient int primary key identity,
 nom nvarchar(150),
 adresse nvarchar(255),
-telephone varchar(15) 
+telephone varchar(15), 
+ville nvarchar(50), 
+pays nvarchar(50)
 )
 
 alter table client 
@@ -34,8 +39,12 @@ add ville nvarchar(50)
 
 create table Commande (
 idCommande int primary key,
-idClient int foreign key references client (idClient),
-etat_Commande varchar(50) check (etat_commande in ('En cours','livrée','annulée') ),
+idClient int foreign key 
+references client (idClient),
+etat_Commande varchar(50) check 
+(etat_commande in ('En cours','livrée','annulée') ),
+date_commande date, 
+total_HT float
 )
 
 alter table commande 
@@ -45,11 +54,16 @@ alter table commande
 add TotalHT float 
 
 create table ligneCommande(
-refProduit int foreign key references produit (refProduit),
-idCommande int foreign key references commande(idCommande),
+refProduit int foreign key 
+references produit (refProduit),
+idCommande int foreign key 
+references commande(idCommande),
 qte int ,
-Constraint PK_ligneCommande primary key (refProduit, idCommande) 
+Constraint PK_ligneCommande 
+primary key (refProduit, idCommande) 
 )
+
+
 
 
 select * from Fournisseur
@@ -200,8 +214,11 @@ group by clt.nom, c.idCommande, c.etat_commande, c.dateCommande, c.TotalHT
 
 
 ---------------------------------Produit par Commande --------------------------------------------
-select p.refProduit ,p.libelleProduit, p.typeProduit, p.prix_Unitaire, lc.qte from produit p, ligneCommande lc 
-where p.refProduit = lc.refProduit and lc.idCommande = 3 and p.refProduit = 2
+select p.refProduit ,p.libelleProduit, p.typeProduit,
+p.prix_Unitaire, lc.qte 
+from produit p, ligneCommande lc 
+where p.refProduit = lc.refProduit 
+and lc.idCommande = 1256
 
 select * from ligneCommande where idCommande = 3
 select idClient from commande where idCommande = 3
@@ -218,26 +235,36 @@ select * from commande
 select * from ligneCommande
 
 ----------------------------------rapport par produit sans periode-------------------------------------
-select p.refProduit, p.LibelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+select p.refProduit, p.LibelleProduit, p.typeProduit, sum(lc.qte) as qteVendue,
+p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] 
+from produit p, ligneCommande lc, Commande c
 where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande
 group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.LibelleProduit
 
 -----------------------------------rapport par produit (periode)-------------------------------------
-select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
-where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande between '06-10-2024' and '06-14-2024'
+select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue,
+p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] 
+from produit p, ligneCommande lc, Commande c
+where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande 
+and c.dateCommande between '06-10-2024' and '06-14-2024'
 group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit
 
 
 select * from ligneCommande where idCommande = 1
 ----------------------------------rapport par produit(type, periode)-------------------------------------
-select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
+select p.refProduit, p.libelleProduit, p.typeProduit, sum(lc.qte) as qteVendue,
+p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] 
+from produit p, ligneCommande lc, Commande c
 where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and c.dateCommande 
 between '06-10-2024' and '06-15-2024' and p.typeProduit ='Machine'
 group by p.refProduit, p.typeProduit, p.prix_Unitaire, p.libelleProduit
 
 --------------------------------------rapport par produit(type)-------------------------------------
-select p.refProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire, sum(lc.qte*p.prix_Unitaire) as [Montant total] from produit p, ligneCommande lc, Commande c
-where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande and p.typeProduit = 'Machine'
+select p.refProduit, p.typeProduit, sum(lc.qte) as qteVendue, p.prix_Unitaire,
+sum(lc.qte*p.prix_Unitaire) as [Montant total] 
+from produit p, ligneCommande lc, Commande c
+where p.refProduit = lc.refProduit and lc.idCommande = c.idCommande
+and p.typeProduit = 'Machine'
 group by p.refProduit, p.typeProduit, p.prix_Unitaire
 
 
@@ -253,7 +280,14 @@ from client c, commande cmd
 where c.idClient = cmd.idClient group by c.idClient, c.nom, c.pays, c.ville
 
 
+
 select cmd.idCommande as [N° commande], cmd.etat_Commande as [Etat Commande], cmd.dateCommande
 as [Date Commande], cmd.TotalHT as [Total HT]
 from commande cmd, client c
-where cmd.idClient = c.idClient and c.idClient = 1
+where cmd.idClient = c.idClient and c.idClient = 10
+
+delete from ligneCommande
+delete from commande
+delete from client 
+delete from produit 
+delete from fournisseur
