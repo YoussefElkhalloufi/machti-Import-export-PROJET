@@ -66,7 +66,6 @@ public class Machti {
         try{
             String query = "INSERT INTO fournisseur VALUES ('"+ f.getNom()+"','"+f.getAdresse()+"','"+f.getTelephone()+"')";
             stmt.executeUpdate(query);
-            //fournisseurs.add(f);
             setFournisseurs();
             return true;
         }catch(SQLException e) {
@@ -79,7 +78,6 @@ public class Machti {
         try{
             String query = "INSERT INTO client values ('"+c.getNom()+"','"+c.getAdresse()+"','"+c.getTelephone()+"','" +c.getVille()+"','"+c.getPays()+"')";
             stmt.executeUpdate(query);
-            //clients.add(c);
             setClients();
             return true;
         }catch(SQLException e){
@@ -92,7 +90,6 @@ public class Machti {
         try{
             String query = "INSERT INTO produit VALUES ('" +p.getLibelleProduit()+"','"+p.getTypeProduit()+"'," +p.getPrixUnitaire()+","+p.getStock() +","+idFournisseur+")" ;
             stmt.executeUpdate(query);
-            //produits.add(p);
             setProduits();
             return true ;
         }catch(SQLException e){

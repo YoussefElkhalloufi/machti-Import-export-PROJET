@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.MouseEvent;
 
@@ -21,36 +20,28 @@ public class ControllerRapportVenteProduit {
 
     @FXML
     private ComboBox<String> CmbType_par1;
-
     @FXML
     private ComboBox<String> CmbType_par2;
-
     @FXML
     private DatePicker dp_a_par1;
-
     @FXML
     private DatePicker dp_a_par2;
-
     @FXML
     private DatePicker dp_du_par1;
-
     @FXML
     private DatePicker dp_du_par2;
-
     @FXML
     private Button genererButton_par0;
-
     @FXML
     private Button genererButton_par1_PERIODE;
-
     @FXML
     private Button genererButton_par1_TYPE;
-
     @FXML
     private Button genererButton_par2;
-
     @FXML
     private Button precedentButton;
+
+
 
     Alerts alert = new Alerts();
     Machti m = ControllerIndex.m ;
@@ -78,7 +69,7 @@ public class ControllerRapportVenteProduit {
             return ;
         }
 
-        if(du_date.isAfter(a_date)){
+        if(du_date.isAfter(a_date)){ // La date debut doit etre Before date fin
             alert.showWarning("Attention","La date de début ne peut pas être après la date de fin.");
             return ;
         }
@@ -87,7 +78,7 @@ public class ControllerRapportVenteProduit {
         String du_date_String = du_date.format(formatter);
         String a_date_String = a_date.format(formatter);
 
-        if(!m.getRapport_par1_PERIODE(du_date_String, a_date_String).next()){
+        if(!m.getRapport_par1_PERIODE(du_date_String, a_date_String).next()){ // si il n y'a aucun produit vendu dans la perdiode specifié
             alert.showWarning("Attention","Aucun produit vendu dans cette periode");
             return ;
         }

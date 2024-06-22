@@ -17,6 +17,7 @@ public class ControllerRapport {
     private AnchorPane rapportParClient;
     @FXML
     private AnchorPane rapportParProduit;
+
     SwitchWindows sw = new SwitchWindows();
 
 

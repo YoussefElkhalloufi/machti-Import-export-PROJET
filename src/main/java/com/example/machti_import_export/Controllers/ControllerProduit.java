@@ -92,7 +92,7 @@ public class ControllerProduit {
 
         for(Produit p : m.getProduits()) {
             if(p.getStock() <= 10){
-                alert.showWarning("Attention","Le stock est bas, il ne reste que "+p.getStock()+" articles du produit " +p.getLibelleProduit());
+                alert.showWarning("Attention","Le stock est bas, il ne reste que "+p.getStock()+" articles du produit '" +p.getLibelleProduit() +"' .");
             }
         }
     }
@@ -124,15 +124,11 @@ public class ControllerProduit {
     void afficherProduit(ActionEvent event) {
         String libellePr = libelleProduitAfficher.getText();
 
-        //produit p = m.afficherProduit(libellePr);
         int indexPr = m.getIndexProduit(libellePr);
         if(indexPr == -1){
             alert.showWarning("Attention","Aucun produit avec ce libelle");
         }else{
-            //System.out.println(produitTableview.getItems().contains(p));
-            //int indexP = produitTableview.getItems().indexOf(p);
             produitTableview.getSelectionModel().select(indexPr);
-            System.out.println("index of produit a afficher: "+indexPr);
         }
     }
 
@@ -152,12 +148,12 @@ public class ControllerProduit {
             alert.showWarning("Attention","Assurez-vous de remplir le libelle, et le fournisseur du produit .");
         }else{
 
-            if(!prixUnitaireProduit.getText().matches("\\d+(\\.\\d+)?")){
+            if(!prixUnitaireProduit.getText().matches("\\d+(\\.\\d+)?")){ // int OR float
                 alert.showWarning("Attention","Le prix unitaire est non valide.");
                 return ;
             }
 
-            if(!stockProduit.getText().matches("[1-9][0-9]*")){
+            if(!stockProduit.getText().matches("[1-9][0-9]*")){ // int except 0 OR 00 ...
                 alert.showWarning("Attention","Le stock est non valide.");
                 return ;
             }

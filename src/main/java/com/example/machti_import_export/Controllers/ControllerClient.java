@@ -127,7 +127,7 @@ public class ControllerClient {
         if(nom.isEmpty()){
             alert.showWarning("Attention","Assurez-vous de remplir le nom du Client .");
         }else{
-            if(!tel.matches("\\d{10}")){
+            if(!tel.matches("\\d{10}")){ //10 chiffres
                 alert.showWarning("Attention","La forme du numero de telephone n'est pas valide.\nEX : 0612129090.");
                 return ;
             }

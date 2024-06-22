@@ -43,7 +43,7 @@ public class ControllerRapportVenteClient {
         }else{
             int idClient = (int) client[0];
             Client clt = null;
-            for(Client c : m.getClients()){
+            for(Client c : m.getClients()){ //Recuperer l'objet CLIENT depuis son ID ( selectionné )
                 if(c.getId() == idClient){
                     clt = c ;
                 }

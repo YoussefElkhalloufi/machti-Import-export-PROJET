@@ -155,11 +155,11 @@ public class PDFgeneration {
 
     public static void rapportParClient(String nomFichier, Client client, ResultSet rs) throws FileNotFoundException, SQLException {
         File rapport = new File("Rapport");
-        if (!rapport.exists()) {
+        if (!rapport.exists()) { // si le répértoire n'est pas crée on le crée
             rapport.mkdir();
         }
 
-        File rapportParClient = new File(rapport, "Rapport Par Client");
+        File rapportParClient = new File(rapport, "Rapport Par Client"); //Dossier a l'interieur dun dossier
         if (!rapportParClient.exists()) {
             rapportParClient.mkdir();
         }

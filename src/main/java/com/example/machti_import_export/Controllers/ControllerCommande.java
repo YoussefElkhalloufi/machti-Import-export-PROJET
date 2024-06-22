@@ -38,12 +38,13 @@ public class ControllerCommande {
     @FXML
     private ComboBox<String> cmbEtatCmd;
 
+//TODO : count LOC in github
 
     SwitchWindows sw = new SwitchWindows();
     Machti m = ControllerIndex.m ;
 
     public static int idCommande = 0;
-    public static Object[] commande = null ;
+    public static Object[] commande = null ; //La commande selecionné, 'STATIC' pour l'acceder depuis d'autre classe
     Alerts alert = new Alerts();
 
 

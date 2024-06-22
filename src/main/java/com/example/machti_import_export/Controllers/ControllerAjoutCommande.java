@@ -96,9 +96,9 @@ public class ControllerAjoutCommande {
 
     @FXML
     void checkQuantite(ActionEvent event) {
-        int qteDemandé = Integer.parseInt(qteProduit.getText());
+        int qteDemande = Integer.parseInt(qteProduit.getText());
 
-        if(qteDemandé > produitSelectionne.getStock()){
+        if(qteDemande > produitSelectionne.getStock()){
             alert.showAlert("Quantité non disponible","La quantité choisi est non disponible au stock .","/images/annuler.png");
             qteProduit.setText("");
         }
@@ -115,7 +115,7 @@ public class ControllerAjoutCommande {
         if(idCommande.getText().isEmpty() || clientSelectionne == null || qteProduit.getText().isEmpty()){
             alert.showWarning("Attention","Veuillez selectionner un client, specifier le numero de la commande et les informations du produit avant de proceder .");
         }else{
-            if(!idCommande.getText().matches("[1-9][0-9]*")){
+            if(!idCommande.getText().matches("[1-9][0-9]*")){ // int sauf 00, 000 ...
                 erreurMsgN_cmd.setVisible(true);
                 idCommande.setText("");
                 return ;
@@ -128,6 +128,7 @@ public class ControllerAjoutCommande {
             int idClt = clientSelectionne.getId();
             int qte = Integer.parseInt(qteProduit.getText());
 
+            //si le produit existe deja dans la commande
             if(m.getProduitParCommande(idCmd, refProduit).next()){
                 alert.showWarning("Attention","Produit " + libelleProduit.getText() +" déjà existant dans la Commande N°: " +idCmd);
                 return ;
@@ -137,7 +138,7 @@ public class ControllerAjoutCommande {
             ResultSet rs = m.commandeExists(idCmd);
             if(rs.next()){
               int idClientCommande = rs.getInt(2) ;
-              ResultSet rsCmd = m.clientCommandeExists(idCmd, idClt);
+              ResultSet rsCmd = m.clientCommandeExists(idCmd, idClt); //si la commande est associé a un client different a celui selecionné
               if(!rsCmd.next()){
                   alert.showWarning("Attention","Cette commande est associé a un autre Client, son ID est : " +idClientCommande);
                   return ;

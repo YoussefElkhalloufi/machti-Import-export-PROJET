@@ -50,7 +50,7 @@ public class ControllerProduitParCommande {
             System.out.println("id est : " + idCommande);
         }
 
-        Object[] commande = ControllerCommande.commande ;
+        Object[] commande = ControllerCommande.commande; //Parceque j'ai besoin des données de la commande
         int idClient = (int) commande[1];
         Date dateCmd = (Date) commande[5];
 
