@@ -38,7 +38,6 @@ public class ControllerCommande {
     @FXML
     private ComboBox<String> cmbEtatCmd;
 
-//TODO : count LOC in github
 
     SwitchWindows sw = new SwitchWindows();
     Machti m = ControllerIndex.m ;
